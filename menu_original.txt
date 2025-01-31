@@ -1,0 +1,3 @@
+Padthai  40
+Padkrapao  30
+Fried-Rice 35
