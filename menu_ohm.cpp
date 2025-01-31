@@ -6,7 +6,7 @@
 using namespace std;
 
 int main() {
-    ifstream source("D:\\project-cpp\\menu_original.txt");
+    ifstream source("menu_original.txt");
 
     if (!source) {
         cerr << "Error: Could not open the file.\n";
