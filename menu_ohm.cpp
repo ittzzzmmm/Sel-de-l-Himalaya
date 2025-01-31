@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -27,19 +28,38 @@ int main() {
 
     source.close();
 
-    cout << "Menu Items:\n";
+    do {
+        cout << "\nWhat do you want to do?\n";
+        cout << "1. Check menu\n";
+        cout << "2. Edit menu\n";
+        cout << "0. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> key;
 
-    int i = 0;
-    int j = 0;
-    while(i < count){
-        cout << j + 1 << ". " << menu[i] << " " << price[i] << " Bath\n";
-        j++;
-        i = i + 2;
-    }
-    
+        switch (key) {
+            case 1:
+                cout << "\nMenu Items:\n";
+                for (int i = 0; i < count; i++) {
+                    if(i%2==0)cout << i + 1 << ". " << menu[i] << " " << price[i] << " Bath\n";
+                    else continue;
+                }
+                break;
+
+            case 2:
+                cout << "Edit menu\n";
+                break;
+
+            case 0:
+                cout << "Exiting this.\n";
+                break;
+
+            default:
+                cout << "Invalid choice. Please try again.\n";
+                break;
+        }
+    } while (key != 0);
 
     return 0;
 }
-
 	
 	
