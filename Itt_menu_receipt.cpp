@@ -6,29 +6,104 @@
 #include<vector>
 using namespace std;
 
-void import_price(vector<int> &Itt_menu_tag){
-    ifstream list("menu_tag.txt");
+void import_menu_price(vector<float> &menu_price){
+    ifstream list("Itt_menu_price.txt");
     string temp;
     while(getline(list,temp)){
-        Itt_menu_tag.push_back(stof(temp));}
+        menu_price.push_back(stof(temp));}
     list.close();
 }
 
-
-void import_menu(vector<string> &Itt_menu_name){
-    ifstream list("menu_original.txt");
+void import_menu_name(vector<string> &menu_name){
+    ifstream list("Itt_menu_name.txt");
     string temp;
     while(getline(list,temp)){
-        Itt_menu_name.push_back(temp);}
+        menu_name.push_back(temp);}
     list.close();
+}
+
+void import_menu_tag(vector<string> &menu_tag){
+    ifstream list("Itt_menu_tag.txt");
+    string temp;
+    while(getline(list,temp)){
+        menu_tag.push_back(temp);}
+    list.close();
+}
+
+void menu_update(vector<string> &menu_tag, vector<string> &menu_name, vector<float> &menu_price){
+    int N = menu_tag.size();
+
+    ofstream tag("Itt_menu_tag.txt");
+    for(int i = 0; i<N; i++){tag << menu_tag[i] << endl ;}
+    tag.close();
+
+    ofstream name("Itt_menu_name.txt");
+    for(int i = 0; i<N; i++){name << menu_name[i] << endl ;}
+    name.close();
+
+    ofstream price("Itt_menu_price.txt");
+    for(int i = 0; i<N; i++){price << menu_price[i] << endl ;}
+    price.close();
+
+}
+
+void show_menu(vector<string> &menu_tag, vector<string> &menu_name, vector<float> &menu_price){
+    cout<<setw(8)<<"tag"<<setw(20)<<"name"<<setw(8)<<"price"<<endl<<endl;
+    for(int i=0; i<menu_tag.size(); i++){
+        cout<<setw(8)<<menu_tag[i]<<setw(20)<<menu_name[i]<<setw(8)<<menu_price[i]<<endl;
+    }
 }
 
 int main(){
 
-    vector<int> Itt_menu_tag;
-    vector<string> Itt_menu_name;
-    vector<float> Itt_menu_price;
+    vector<string> menu_tag;
+    vector<string> menu_name;
+    vector<float> menu_price;
+
+
+    import_menu_tag(menu_tag); // ได้ array menu_tag
     
-    import_menu(Itt_menu_name); // เราได้ array ของ menu_name เเล้ว
-    cout << Itt_menu_name[0]<<" "<< Itt_menu_name[1]<<" "<< Itt_menu_name[2];    
+    import_menu_name(menu_name); // ได้ array ของ menu_name 
+
+    import_menu_price(menu_price); // ได้ array menu_price
+    
+    
+    // โปรแกรมนี้จะรับค่า array โต๊ะว่ามีอาหารอะไรบ้าง เช่น vector<bool> order_t1 = {1,0,0,0,1,1,0,1}; 
+    // โดยstatus 1 จะหมายถึง user มีการสั่ง menu ในลำดับนั้นๆ
+
+    do{
+        cout << "----------------------------------------\n\n";
+        cout << "What would you like to do.\n\n";
+        cout << "[1] add menu\n";
+        cout << "[2] show menu\n";
+        cout << "[3] Exit\n\n";
+        cout << "Select : " ;
+        int action;
+        cin >> action ;
+        cout << "----------------------------------------\n";
+
+        if(action==1){
+            string tag = "";
+            string name = "";
+            float price ;
+            cout << "Please enter the menu tag : ";
+            cin >> tag ;
+            cout << "Please enter the menu name : ";
+            cin.ignore();
+            getline(cin,name);
+            cout << "Please enter the menu price : ";
+            cin >> price ;
+            menu_tag.push_back(tag); menu_name.push_back(name);menu_price.push_back(price); 
+            menu_update(menu_tag,menu_name,menu_price);
+            cout << "----------------------------------------\n";
+            cout << "*** menu updated ***" << endl;
+        }
+        else if(action==2){
+            show_menu(menu_tag,menu_name,menu_price);
+        }
+        else if(action==3){break;}
+        else{cout << "Please try again\n";}
+
+    }while(1);
+
 }
