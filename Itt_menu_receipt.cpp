@@ -75,8 +75,9 @@ int main(){
         cout << "----------------------------------------\n\n";
         cout << "What would you like to do.\n\n";
         cout << "[1] add menu\n";
-        cout << "[2] show menu\n";
-        cout << "[3] Exit\n\n";
+        cout << "[2] remove menu\n";
+        cout << "[3] show menu\n";
+        cout << "[4] Exit\n\n";
         cout << "Select : " ;
         int action;
         cin >> action ;
@@ -99,9 +100,26 @@ int main(){
             cout << "*** menu updated ***" << endl;
         }
         else if(action==2){
-            show_menu(menu_tag,menu_name,menu_price);
+            show_menu(menu_tag,menu_name,menu_price); 
+            cout << "----------------------------------------\n";
+            cout << "Please enter the menu tag of the menu that you would like to remove : ";
+            string temp2;
+            cin>>temp2;
+            for(int i2=0; i2<menu_tag.size();i2++){
+                if(temp2==menu_tag[i2]){
+                    menu_tag.erase(menu_tag.begin()+i2);
+                    menu_name.erase(menu_name.begin()+i2);
+                    menu_price.erase(menu_price.begin()+i2);
+                }
+            }
+            menu_update(menu_tag,menu_name,menu_price);
+            cout << "----------------------------------------\n";
+            cout << "*** menu updated ***" << endl;
         }
-        else if(action==3){break;}
+        else if(action==3){
+            show_menu(menu_tag,menu_name,menu_price); 
+        }
+        else if(action==4){break;}
         else{cout << "Please try again\n";}
 
     }while(1);
