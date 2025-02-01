@@ -1,52 +1,116 @@
 #include <iostream>
 #include <string>
 #include <iomanip> // สำหรับจัดรูปแบบการแสดงผล
+#include <limits> // สำหรับ numeric_limits
 
 using namespace std;
 
+const int MAX_MENU_ITEMS = 100;
+
 int main() {
-    // เมนูอาหาร (ใช้ array หลายมิติ เพื่อจัดกลุ่มข้อมูลที่เกี่ยวข้อง)
-    string menu[3][4] = {
-        {"1", "ข้าวผัดกะเพรา", "อาหาร", "50.0"},
-        {"2", "ต้มยำกุ้ง", "อาหาร", "80.0"},
-        {"3", "น้ำอัดลม", "เครื่องดื่ม", "20.0"}
-    };
-    int menuSize = sizeof(menu) / sizeof(menu[0]); // คำนวณขนาดอัตโนมัติ
+    string menuName[MAX_MENU_ITEMS];
+    double menuPrice[MAX_MENU_ITEMS];
+    int soldCount[MAX_MENU_ITEMS] = {0}; // เริ่มต้นจำนวนขายเป็น 0
+    int menuSize = 0; // จำนวนรายการอาหารปัจจุบัน
 
-    // ออเดอร์ (ใช้ array หลายมิติ เพื่อจัดกลุ่มข้อมูลที่เกี่ยวข้อง)
-    string orders[2][5] = {
-        {"1", "2024-05-16", "12:00", "1", "2"},//Id order,วันที่สั่งซื้อ,เวลาที่ซื้อ,id เมนูที่สั่ง,จำนวนที่สั่ง
-        {"2", "2024-05-16", "12:00", "3", "1"}
-    };
-    int orderSize = sizeof(orders) / sizeof(orders[0]); // คำนวณขนาดอัตโนมัติ
-
-    // ตัวแปรเก็บสถิติ
     double totalSales = 0.0;
     int bestSellerId = 0, maxSold = 0;
-    int soldCount[menuSize] = {0}; // เก็บจำนวนที่ขายของแต่ละเมนู
 
-    // คำนวณยอดขาย
-    for (int i = 0; i < orderSize; i++) { // Loop นอก วนซ้ำตามจำนวนออเดอร์ทั้งหมด
-        for (int j = 0; j < menuSize; j++) { // Loop ใน วนซ้ำตามจำนวนเมนูทั้งหมด
-            if (orders[i][3] == menu[j][0]) { // ตรวจสอบว่าเมนูในออเดอร์ตรงกับเมนูใดในเมนูทั้งหมด
-                totalSales += stod(menu[j][3]) * stoi(orders[i][4]); // คำนวณยอดขายของเมนูนั้นๆ
-                soldCount[j] += stoi(orders[i][4]); // เพิ่มจำนวนที่ขายของเมนูนั้นๆ
-                if (soldCount[j] > maxSold) { // ตรวจสอบว่าเมนูนี้ขายดีที่สุดหรือไม่
-                    maxSold = soldCount[j]; // อัพเดทจำนวนที่ขายดีที่สุด
-                    bestSellerId = stoi(menu[j][0]); // อัพเดท ID ของเมนูที่ขายดีที่สุด
-                }
+    while (true) {
+        cout << "\n--- เพิ่มรายการอาหาร ---" << endl;
+        string name;
+        double price;
+
+        cout << "ชื่ออาหาร (หรือพิมพ์ 'หยุด' เพื่อสิ้นสุด): ";
+        getline(cin >> ws, name); // อ่านชื่ออาหารรวมช่องว่าง
+
+        if (name == "หยุด") {
+            break; // ออกจาก loop ถ้าผู้ใช้พิมพ์ "หยุด"
+        }
+
+        cout << "ราคา: ";
+        cin >> price;
+
+        // ตรวจสอบว่าราคาเป็นตัวเลขที่ถูกต้อง
+        if (cin.fail()) {
+            cout << "ราคากรอกไม่ถูกต้อง กรุณาลองอีกครั้ง" << endl;
+            cin.clear(); // ล้างค่า error ใน cin
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear buffer
+            continue;
+        }
+
+        if (menuSize < MAX_MENU_ITEMS) {
+            menuName[menuSize] = name;
+            menuPrice[menuSize] = price;
+            menuSize++;
+        } else {
+            cout << "รายการอาหารเต็มแล้ว ไม่สามารถเพิ่มได้อีก" << endl;
         }
     }
-}
+
+    while (true) {
+        cout << "\n--- สั่งอาหาร ---" << endl;
+        int orderMenuId;
+        int quantity;
+
+        // แสดงเมนูให้ผู้ใช้เลือก
+        for (int i = 0; i < menuSize; i++) {
+            cout << i + 1 << ". " << menuName[i] << " (" << menuPrice[i] << " บาท)" << endl;
+        }
+
+        cout << "ID อาหารที่ต้องการ (หรือพิมพ์ 0 เพื่อสิ้นสุด): ";
+        cin >> orderMenuId;
+
+        if (orderMenuId == 0) {
+            break; // ออกจาก loop ถ้าผู้ใช้พิมพ์ 0
+        }
+
+        if (orderMenuId > menuSize || orderMenuId <= 0) {
+            cout << "ID อาหารไม่ถูกต้อง กรุณาลองอีกครั้ง" << endl;
+            continue;
+        }
+
+        cout << "จำนวน: ";
+        cin >> quantity;
+
+        // ตรวจสอบว่าจำนวนเป็นตัวเลขที่ถูกต้อง
+        if (cin.fail()) {
+            cout << "จำนวนที่สั่งไม่ถูกต้อง กรุณาลองอีกครั้ง" << endl;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            continue;
+        }
+
+        int menuIndex = orderMenuId - 1;//เพื่อให้เริ่มที่arr[0]
+
+        totalSales += menuPrice[menuIndex] * quantity;
+        soldCount[menuIndex] += quantity;
+
+        if (soldCount[menuIndex] > maxSold) {
+            maxSold = soldCount[menuIndex];
+            bestSellerId = orderMenuId;
+        }
+    }
 
     // แสดงผล
-    
+    cout << fixed << setprecision(2);
+    cout << "\n--- สรุปผล ---" << endl;
     cout << "ยอดขายรวมทั้งหมด: " << totalSales << " บาท" << endl;
 
-    // แสดงเมนูขายดีที่สุด
+    if (maxSold > 0) {
+        cout << "เมนูขายดีที่สุด: " << menuName[bestSellerId - 1] << " (" << maxSold << " จาน)" << endl;
+    } else {
+        cout << "ยังไม่มีการสั่งซื้อ" << endl;
+    }
+
+    // แสดงรายการอาหารที่ขายได้และขายไม่ได้
+    cout << "\n--- รายการอาหาร ---" << endl;
     for (int i = 0; i < menuSize; i++) {
-        if (stoi(menu[i][0]) == bestSellerId) {
-            cout << "เมนูขายดีที่สุด: " << menu[i][1] << " (" << maxSold << " จาน)" << endl;
+        cout << menuName[i] << " (" << menuPrice[i] << " บาท): ";
+        if (soldCount[i] > 0) {
+            cout << "ขายได้ (" << soldCount[i] << " จาน)" << endl;
+        } else {
+            cout << "ขายไม่ได้" << endl;
         }
     }
 
