@@ -6,28 +6,22 @@
 #include<vector>
 using namespace std;
 
-void import_menu_price(vector<float> &menu_price){
-    ifstream list("Itt_menu_price.txt");
+void import_menu(vector<string> &menu_tag,vector<string> &menu_name,vector<float> &menu_price){
     string temp;
-    while(getline(list,temp)){
-        menu_price.push_back(stof(temp));}
-    list.close();
-}
-
-void import_menu_name(vector<string> &menu_name){
-    ifstream list("Itt_menu_name.txt");
-    string temp;
-    while(getline(list,temp)){
-        menu_name.push_back(temp);}
-    list.close();
-}
-
-void import_menu_tag(vector<string> &menu_tag){
-    ifstream list("Itt_menu_tag.txt");
-    string temp;
-    while(getline(list,temp)){
+    ifstream list1("Itt_menu_tag.txt");
+    while(getline(list1,temp)){
         menu_tag.push_back(temp);}
-    list.close();
+    list1.close();
+
+    ifstream list2("Itt_menu_name.txt");
+    while(getline(list2,temp)){
+        menu_name.push_back(temp);}
+    list2.close();
+
+    ifstream list3("Itt_menu_price.txt");
+    while(getline(list3,temp)){
+        menu_price.push_back(stof(temp));}
+    list3.close();
 }
 
 void menu_update(vector<string> &menu_tag, vector<string> &menu_name, vector<float> &menu_price){
@@ -60,16 +54,7 @@ int main(){
     vector<string> menu_name;
     vector<float> menu_price;
 
-
-    import_menu_tag(menu_tag); // ได้ array menu_tag
-    
-    import_menu_name(menu_name); // ได้ array ของ menu_name 
-
-    import_menu_price(menu_price); // ได้ array menu_price
-    
-    
-    // โปรแกรมนี้จะรับค่า array โต๊ะว่ามีอาหารอะไรบ้าง เช่น vector<bool> order_t1 = {1,0,0,0,1,1,0,1}; 
-    // โดยstatus 1 จะหมายถึง user มีการสั่ง menu ในลำดับนั้นๆ
+    import_menu(menu_tag,menu_name,menu_price); // ได้ array menu
 
     do{
         cout << "----------------------------------------\n\n";
