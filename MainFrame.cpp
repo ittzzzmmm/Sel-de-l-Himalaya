@@ -1,21 +1,20 @@
 #include "MainFrame.h"
 
-MainFrame::MainFrame()
-    : wxFrame(nullptr, wxID_ANY, "Restaurant Management System", wxDefaultPosition, wxSize(500, 400)), tableBooked(6, false)
+MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, "Restaurant Management System", wxDefaultPosition, wxSize(500, 400))
 {
-    
     currentPanel = nullptr;
 
     wxBoxSizer* frameSizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(frameSizer);
 
-    CreateStatusBar();
+
+    tableBooked.resize(numTables, false);
+    tableDetails.resize(numTables, { "", "" });
 
     ShowRole();
 
     Layout();
 }
-
 
 void MainFrame::ShowRole() {
     if (currentPanel) {
@@ -59,11 +58,11 @@ void MainFrame::BookTable() {
     wxGridSizer* gridSizer = new wxGridSizer(0, 2, 10, 10);
     buttons.clear();
 
-    for (int i = 0; i < 6; i++) {
-        wxString label = wxString::Format("Table : %d%s", i + 1, tableBooked[i] ? " " : "");
+    for (int i = 0; i < numTables; i++) {
+        wxString label = wxString::Format("Table : %d%s", i + 1, tableBooked[i] ? " (Unavailable)" : "");
         wxButton* button = new wxButton(currentPanel, wxID_ANY, label, wxDefaultPosition, wxSize(300, 100));
         buttons.push_back(button);
-        gridSizer->Add(button, 1, wxEXPAND | wxALL, 5);
+        gridSizer->Add(button, 0, wxEXPAND | wxALL, 5);
 
         if (tableBooked[i]) {
             button->SetBackgroundColour(*wxRED);
@@ -84,19 +83,44 @@ void MainFrame::BookTable() {
             });
 
         button->Bind(wxEVT_BUTTON, [this, i, button](wxCommandEvent&) {
-            wxTextEntryDialog nameDialog(this, "Enter your name:", "Table Booking");
-            if (nameDialog.ShowModal() == wxID_OK) {
-                wxString name = nameDialog.GetValue();
-                wxTextEntryDialog detailsDialog(this, "Enter additional details:", "Table Booking");
-                if (detailsDialog.ShowModal() == wxID_OK) {
-                    wxString details = detailsDialog.GetValue();
-                    tableBooked[i] = true;
-                    button->SetLabel(wxString::Format("Table : %d (Unavailable)", i + 1));
-                    button->SetBackgroundColour(*wxRED);
-                    button->Refresh();
-                    wxMessageBox(wxString::Format("Table %d booked for %s\nDetails: %s", i + 1, name, details), "Confirmation", wxOK | wxICON_INFORMATION, this);
-                }
+            wxDialog dialog(this, wxID_ANY, "Table Booking");
+            wxBoxSizer* dialogSizer = new wxBoxSizer(wxVERTICAL);
+
+            wxStaticText* nameLabel = new wxStaticText(&dialog, wxID_ANY, "Enter your name:");
+            wxTextCtrl* nameCtrl = new wxTextCtrl(&dialog, wxID_ANY, "");
+            wxStaticText* detailsLabel = new wxStaticText(&dialog, wxID_ANY, "Enter additional details (Time / Phone Number):");
+            wxTextCtrl* detailsCtrl = new wxTextCtrl(&dialog, wxID_ANY, "");
+            wxButton* okButton = new wxButton(&dialog, wxID_OK, "OK");
+            wxButton* cancelButton = new wxButton(&dialog, wxID_CANCEL, "Cancel");
+
+            dialogSizer->Add(nameLabel, 0, wxALL | wxEXPAND, 5);
+            dialogSizer->Add(nameCtrl, 0, wxALL | wxEXPAND, 5);
+            dialogSizer->Add(detailsLabel, 0, wxALL | wxEXPAND, 5);
+            dialogSizer->Add(detailsCtrl, 0, wxALL | wxEXPAND, 5);
+
+            wxBoxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL);
+            buttonSizer->Add(okButton, 0, wxALL, 5);
+            buttonSizer->Add(cancelButton, 0, wxALL, 5);
+
+            dialogSizer->Add(buttonSizer, 0, wxALIGN_CENTER | wxALL, 5);
+            dialog.SetSizer(dialogSizer);
+            dialog.SetSize(300, 250);
+            dialog.CenterOnParent(); 
+
+            if (dialog.ShowModal() == wxID_OK) {
+                wxString name = nameCtrl->GetValue();
+                wxString details = detailsCtrl->GetValue();
+
+                tableDetails[i] = { name, details };
+                tableBooked[i] = true;
+
+                button->SetLabel(wxString::Format("Table : %d (Unavailable)", i + 1));
+                button->SetBackgroundColour(*wxRED);
+                button->Refresh();
+                wxMessageBox(wxString::Format("Table %d booked for %s\nDetails: %s", i + 1, name, details), "Confirmation", wxOK | wxICON_INFORMATION, this);
             }
+
+
             });
     }
 
@@ -141,7 +165,7 @@ void MainFrame::ShowLogin() {
     loginButton->Bind(wxEVT_BUTTON, [this, usernameCtrl, passwordCtrl](wxCommandEvent&) {
         wxString username = usernameCtrl->GetValue();
         wxString password = passwordCtrl->GetValue();
-        if (username == "employee" && password == "1234") {
+        if (username == "1" && password == "1") {
             ShowEmployeeSystem();
         }
         else {
@@ -171,6 +195,12 @@ void MainFrame::ShowEmployeeSystem() {
     sizer->Add(tableOrderButton, 0, wxALL | wxALIGN_CENTER, 5);
     sizer->Add(manageMenuButton, 0, wxALL | wxALIGN_CENTER, 5);
 
+    wxButton* addTableButton = new wxButton(currentPanel, wxID_ANY, "Add Table");
+    wxButton* removeTableButton = new wxButton(currentPanel, wxID_ANY, "Remove Table");
+
+    sizer->Add(addTableButton, 0, wxALL | wxALIGN_CENTER, 5);
+    sizer->Add(removeTableButton, 0, wxALL | wxALIGN_CENTER, 5);
+
     currentPanel->SetSizer(sizer);
 
     tableOrderButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent&) {
@@ -181,6 +211,26 @@ void MainFrame::ShowEmployeeSystem() {
         ShowManageMenu();
         });
 
+    addTableButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent&) {
+        numTables++;
+        tableBooked.push_back(false);
+        tableDetails.push_back({ "", "" });
+
+        wxMessageBox(wxString::Format("Added Table %d", numTables), "Success", wxOK | wxICON_INFORMATION, this);
+        });
+
+    removeTableButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent&) {
+        if (numTables > 1) {
+            numTables--;
+            tableBooked.pop_back();
+            tableDetails.pop_back();
+
+            wxMessageBox(wxString::Format("Removed Table %d", numTables + 1), "Success", wxOK | wxICON_INFORMATION, this);
+        }
+        else {
+            wxMessageBox("At least one table is required!", "Error", wxOK | wxICON_ERROR, this);
+        }
+        });
 
     Layout();
 }
@@ -241,7 +291,7 @@ void MainFrame::ShowOrderMenu() {
     wxGridSizer* gridSizer = new wxGridSizer(0, 2, 10, 10);
     buttons.clear();
 
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < numTables; i++) {
         wxString label = wxString::Format("Table : %d", i + 1);
         wxButton* button = new wxButton(currentPanel, wxID_ANY, label, wxDefaultPosition, wxSize(300, 100));
         buttons.push_back(button);

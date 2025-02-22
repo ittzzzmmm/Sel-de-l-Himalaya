@@ -21,9 +21,12 @@ public:
     void CalculateTotal();
 
 private:
+
+    int numTables = 10;
     wxPanel* currentPanel;
     std::vector<wxButton*> buttons;
     std::vector<bool> tableBooked;
+    std::vector<std::pair<wxString, wxString>> tableDetails;
 };
 
 #endif // MAINFRAME_H
