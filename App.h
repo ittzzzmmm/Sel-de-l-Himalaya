@@ -1,10 +1,12 @@
-#pragma once
-#include<wx/wx.h>
+#ifndef RESTAURANT_APP_H
+#define RESTAURANT_APP_H
 
-class App : public wxApp
-{
+#include <wx/wx.h>
+#include "MainFrame.h"
+
+class RestaurantApp : public wxApp {
 public:
-	bool OnInit();
+    virtual bool OnInit();
 };
 
-
+#endif // RESTAURANT_APP_H

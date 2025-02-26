@@ -11,7 +11,7 @@ void saveListToFile(const std::vector<List>& lists, const std::string& fileName)
 	ostream << lists.size();
 
 	for (const List& list : lists) {
-		
+
 		std::string name = list.name;
 		std::replace(name.begin(), name.end(), ' ', '_');
 
@@ -31,7 +31,7 @@ std::vector<List> loadListFromFile(const std::string& fileName)
 	int n;
 	istream >> n;
 
-	for (int i = 0;i < n;i++) {
+	for (int i = 0; i < n; i++) {
 		int tag;
 		std::string name;
 		int price;

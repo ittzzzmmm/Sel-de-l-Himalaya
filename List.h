@@ -11,4 +11,3 @@ struct List
 
 void saveListToFile(const std::vector<List>& lists, const std::string& fileName);
 std::vector<List>loadListFromFile(const std::string& fileName);
-
