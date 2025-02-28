@@ -43,6 +43,7 @@ public:
     void ShowDataTable();
     void DeleteListBox();
 
+
 private:
     wxPanel* currentPanel;
     std::vector<wxButton*> buttons;

@@ -40,6 +40,5 @@ std::vector<List> loadListFromFile(const std::string& fileName)
 		std::replace(name.begin(), name.end(), '_', ' ');
 		lists.push_back(List{ tag,name,price });
 	}
-
 	return lists;
 }
