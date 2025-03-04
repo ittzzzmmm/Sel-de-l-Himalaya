@@ -42,7 +42,7 @@ void MainFrame::ShowRole() {
     customerButton->SetBackgroundColour(wxColour(168, 157, 117));
     customerButton->SetFont(buttonFont);
     customerButton->Refresh();
-    wxButton* employeeButton = new wxButton(panel, wxID_ANY, "Staff" , wxDefaultPosition, wxSize(200, 50));
+    wxButton* employeeButton = new wxButton(panel, wxID_ANY, "Staff", wxDefaultPosition, wxSize(200, 50));
     employeeButton->SetBackgroundColour(wxColour(168, 157, 117));
     employeeButton->SetFont(buttonFont);
     employeeButton->Refresh();
@@ -57,10 +57,10 @@ void MainFrame::ShowRole() {
     panel->SetSizer(sizer);
 
     customerButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent&) {
-        BookTable(); // °¥«Ë“‡ªÁπ≈Ÿ°§È“·≈È«‰ªÀπÈ“®Õß‚µÍ–
+        BookTable(); // ‡∏Å‡∏î‡∏ß‡πà‡∏≤‡πÄ‡∏õ‡πá‡∏ô‡∏•‡∏π‡∏Å‡∏Ñ‡πâ‡∏≤‡πÅ‡∏•‡πâ‡∏ß‡πÑ‡∏õ‡∏´‡∏ô‡πâ‡∏≤‡∏à‡∏≠‡∏á‡πÇ‡∏ï‡πä‡∏∞
         });
     employeeButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent&) {
-        ShowLogin(); // °¥«Ë“‡ªÁπ≈Ÿ°®È“ß·≈È«‰ªÀπÈ“ login
+        ShowLogin(); // ‡∏Å‡∏î‡∏ß‡πà‡∏≤‡πÄ‡∏õ‡πá‡∏ô‡∏•‡∏π‡∏Å‡∏à‡πâ‡∏≤‡∏á‡πÅ‡∏•‡πâ‡∏ß‡πÑ‡∏õ‡∏´‡∏ô‡πâ‡∏≤ login
         });
 
     SwitchPanel(panel);
@@ -73,7 +73,7 @@ void MainFrame::BookTable() {
     panel->SetBackgroundColour(wxColour(77, 56, 44));
     wxGridSizer* gridSizer = new wxGridSizer(0, 2, 10, 10);
     buttons.clear();
-    wxFont buttonFont(20,wxFONTFAMILY_ROMAN,wxFONTSTYLE_NORMAL,wxFONTWEIGHT_NORMAL,false);
+    wxFont buttonFont(20, wxFONTFAMILY_ROMAN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false);
     for (int i = 0; i < tableCount; i++) {
         wxString label = wxString::Format("Table : %d", i + 1);
         wxButton* button = new wxButton(panel, wxID_ANY, label, wxDefaultPosition, wxSize(300, 100));
@@ -85,14 +85,14 @@ void MainFrame::BookTable() {
 
         button->Bind(wxEVT_BUTTON, [this, i, button](wxCommandEvent&) {
             if (tableBooked[i]) {
-                wxString bookingHistory = "ª√–«—µ‘°“√®Õß∑—ÈßÀ¡¥¢Õß‚µÍ–π’È:\n";
+                wxString bookingHistory = "All booking history for this table:\n";
                 for (const auto& booking : tableDetails[i]) {
-                    bookingHistory += wxString::Format("‡«≈“: %s \n",
+                    bookingHistory += wxString::Format("time: %s \n",
                         wxString::FromUTF8(std::get<1>(booking).c_str())
                     );
                 }
 
-                wxMessageBox(bookingHistory, "‚µÍ–π’È∂Ÿ°®Õß·≈È«", wxOK | wxICON_INFORMATION, this);
+                wxMessageBox(bookingHistory, "table history", wxOK | wxICON_INFORMATION, this);
             }
 
             wxDialog dialog(this, wxID_ANY, "Table Booking");
@@ -138,9 +138,9 @@ void MainFrame::BookTable() {
 
 
                 button->Refresh();
-                wxString bookingHistory = "ª√–«—µ‘°“√®Õß∑—ÈßÀ¡¥¢Õß‚µÍ–π’È:\n";
+                wxString bookingHistory = "All booking history for this table:\n";
                 for (const auto& booking : tableDetails[i]) {
-                    bookingHistory += wxString::Format("™◊ËÕ: %s | ‡«≈“: %s | √“¬≈–‡Õ’¬¥: %s\n",
+                    bookingHistory += wxString::Format("name: %s | time: %s | details: %s\n",
                         wxString::FromUTF8(std::get<0>(booking).c_str()),
                         wxString::FromUTF8(std::get<1>(booking).c_str()),
                         wxString::FromUTF8(std::get<2>(booking).c_str()));
@@ -151,7 +151,7 @@ void MainFrame::BookTable() {
             });
     }
 
-    wxButton* backButton = new wxButton(panel, wxID_ANY, "Back",wxDefaultPosition,wxSize(200,40));
+    wxButton* backButton = new wxButton(panel, wxID_ANY, "Back", wxDefaultPosition, wxSize(200, 40));
     backButton->SetBackgroundColour(wxColour(168, 157, 117));
     backButton->SetFont(buttonFont);
     backButton->Refresh();
@@ -225,7 +225,7 @@ void MainFrame::ShowEmployeeSystem() {
     panel->SetBackgroundColour(wxColour(168, 157, 117));
     wxFont textFont(15, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
     wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-    wxButton* tableOrderButton = new wxButton(panel, wxID_ANY, "Table",wxDefaultPosition,wxSize(190,45));
+    wxButton* tableOrderButton = new wxButton(panel, wxID_ANY, "Table", wxDefaultPosition, wxSize(190, 45));
     wxButton* manageMenuButton = new wxButton(panel, wxID_ANY, "Manage Menu", wxDefaultPosition, wxSize(190, 45));
     wxButton* manageTablesButton = new wxButton(panel, wxID_ANY, "Manage Tables", wxDefaultPosition, wxSize(190, 45));
     wxButton* resDetailButton = new wxButton(panel, wxID_ANY, "Reservation Detail", wxDefaultPosition, wxSize(190, 45));
@@ -292,7 +292,7 @@ void MainFrame::ShowTableToOrderMenu() {
             });
     }
 
-    wxButton* backButton = new wxButton(panel, wxID_ANY, "Back",wxDefaultPosition,wxSize(140,-1));
+    wxButton* backButton = new wxButton(panel, wxID_ANY, "Back", wxDefaultPosition, wxSize(140, -1));
     backButton->SetFont(textFont);
     backButton->SetBackgroundColour(wxColour(168, 157, 117));
     backButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent&) {
@@ -312,7 +312,7 @@ void MainFrame::ShowManageMenu() {
     wxPanel* panel = new wxPanel(this);
     panel->SetBackgroundColour(wxColour(77, 56, 44));
     wxBoxSizer* panelSizer = new wxBoxSizer(wxVERTICAL);
-    wxFont btnFont(15, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL); 
+    wxFont btnFont(15, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 
     wxScrolledWindow* scrolledWindow = new wxScrolledWindow(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
         wxHSCROLL | wxVSCROLL);
@@ -352,7 +352,7 @@ void MainFrame::ShowManageMenu() {
 
     panelSizer->Add(scrolledWindow, 1, wxEXPAND | wxALL, 10);
 
-    wxButton* addButton = new wxButton(panel, wxID_ANY, "Add" , wxDefaultPosition , wxSize(150,35));
+    wxButton* addButton = new wxButton(panel, wxID_ANY, "Add", wxDefaultPosition, wxSize(150, 35));
     wxButton* removeButton = new wxButton(panel, wxID_ANY, "Remove", wxDefaultPosition, wxSize(150, 35));
     wxButton* backButton = new wxButton(panel, wxID_ANY, "Back", wxDefaultPosition, wxSize(150, 35));
 
@@ -408,8 +408,8 @@ void MainFrame::ShowAddPanel() {
     priceLabel->SetFont(textFont);
     priceInput->SetFont(textFont);
 
-    wxButton* addConfirm = new wxButton(panel, wxID_ANY, "Confirm",wxDefaultPosition,wxSize(150,30));
-    wxButton* backButton = new wxButton(panel, wxID_ANY, "Back",wxDefaultPosition, wxSize(150, 30));
+    wxButton* addConfirm = new wxButton(panel, wxID_ANY, "Confirm", wxDefaultPosition, wxSize(150, 30));
+    wxButton* backButton = new wxButton(panel, wxID_ANY, "Back", wxDefaultPosition, wxSize(150, 30));
     addConfirm->SetBackgroundColour(wxColour(212, 203, 169));
     backButton->SetBackgroundColour(wxColour(212, 203, 169));
     addConfirm->SetFont(textFont);
@@ -444,7 +444,7 @@ void MainFrame::ShowAddPanel() {
         bool foundFlag = 0;
 
         std::vector<List> menuList = loadListFromFile("menuList.txt");
-        for (int i = 0;i < menuList.size();i++) {
+        for (int i = 0; i < menuList.size(); i++) {
             if (temp.tag == menuList[i].tag) {
                 wxFrame* miniWindow = new wxFrame(this, wxID_ANY, "Announcement", wxDefaultPosition, wxSize(400, 200),
                     wxDEFAULT_FRAME_STYLE & ~wxRESIZE_BORDER);
@@ -461,7 +461,7 @@ void MainFrame::ShowAddPanel() {
 
                 miniWindow->Bind(wxEVT_CLOSE_WINDOW, [this, miniWindow](wxCloseEvent&) {
                     miniWindow->Destroy();
-                    
+
                     });
                 miniWindow->Show();
                 foundFlag = 1;
@@ -471,7 +471,7 @@ void MainFrame::ShowAddPanel() {
         if (!foundFlag) {
 
             menuList.push_back(temp);
-            std::sort(menuList.begin(), menuList.end(), [](const List& a, const List& b) {return a.tag < b.tag;});
+            std::sort(menuList.begin(), menuList.end(), [](const List& a, const List& b) {return a.tag < b.tag; });
             saveListToFile(menuList, "menuList.txt");
 
             wxFrame* miniWindow = new wxFrame(this, wxID_ANY, "Announcement", wxDefaultPosition, wxSize(300, 200),
@@ -491,7 +491,8 @@ void MainFrame::ShowAddPanel() {
                 miniWindow->Destroy();
                 ShowManageMenu();
                 });
-            miniWindow->Show();}
+            miniWindow->Show();
+        }
         });
 
     panel->SetSizer(mainSizer);
@@ -506,7 +507,7 @@ void MainFrame::ShowRemovePanel() {
 
     wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 
-    wxStaticText* tagText = new wxStaticText(panel,wxID_ANY,"Enter menu tag to remove :");
+    wxStaticText* tagText = new wxStaticText(panel, wxID_ANY, "Enter menu tag to remove :");
     wxTextCtrl* tagInput = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxSize(200, -1));
     wxButton* removeConfirm = new wxButton(panel, wxID_ANY, "Confirm", wxDefaultPosition, wxSize(140, -1));
     wxButton* backButton = new wxButton(panel, wxID_ANY, "Back", wxDefaultPosition, wxSize(140, -1));
@@ -556,7 +557,7 @@ void MainFrame::ShowRemovePanel() {
                 miniWindow->Show();
                 foundFlag = 1;
                 break;
-            }  
+            }
         }
         if (!foundFlag) {
             wxFrame* miniWindow = new wxFrame(this, wxID_ANY, "Announcement", wxDefaultPosition, wxSize(300, 200),
@@ -580,7 +581,7 @@ void MainFrame::ShowRemovePanel() {
         }
         saveListToFile(menuList, "menuList.txt");
 
-        
+
         });
 
     panel->SetSizer(mainSizer);
@@ -608,7 +609,7 @@ void MainFrame::ShowManageTables()
 
     // Buttons for adding and removing tables.
     wxBoxSizer* btnSizer = new wxBoxSizer(wxHORIZONTAL);
-    wxButton* addTableButton = new wxButton(panel, wxID_ANY, "Add Table",wxDefaultPosition,wxSize(200,40));
+    wxButton* addTableButton = new wxButton(panel, wxID_ANY, "Add Table", wxDefaultPosition, wxSize(200, 40));
     wxButton* removeTableButton = new wxButton(panel, wxID_ANY, "Remove Table", wxDefaultPosition, wxSize(200, 40));
     addTableButton->SetBackgroundColour(wxColour(168, 157, 117));
     removeTableButton->SetBackgroundColour(wxColour(168, 157, 117));
@@ -620,7 +621,7 @@ void MainFrame::ShowManageTables()
     mainSizer->AddStretchSpacer();
 
     // Back button to return to the Employee Main Menu.
-    wxButton* backButton = new wxButton(panel, wxID_ANY, "Back",wxDefaultPosition,wxSize(150,35));
+    wxButton* backButton = new wxButton(panel, wxID_ANY, "Back", wxDefaultPosition, wxSize(150, 35));
     backButton->SetFont(btnFont);
     backButton->SetBackgroundColour(wxColour(168, 157, 117));
     mainSizer->Add(backButton, 0, wxALL | wxALIGN_CENTER, 10);
@@ -650,13 +651,11 @@ void MainFrame::ShowManageTables()
 
 void MainFrame::LoadTableData()
 {
-    std::ifstream inputFile("tableCount.txt");
-    if (!inputFile.is_open()) {
-        wxMessageBox("Failed to open tableCount.txt", "Error", wxOK | wxICON_ERROR);
-        return;
-    }
 
+    tableCount = 6;
+    std::ifstream inputFile("tableCount.txt");
     inputFile >> tableCount;
+
     tableBooked.resize(tableCount);  // Resize tableBooked vector
     tableDetails.resize(tableCount); // Resize tableDetails vector
 
@@ -689,7 +688,7 @@ void MainFrame::ShowOrderFood(int tableNumber) {
         wxStaticText* foodItem = new wxStaticText(scrolledWindow, wxID_ANY,
             wxString::Format("%d    %s    %d THB", item.tag, item.name, item.price));
         foodItem->SetFont(textFont);
-        scrolledSizer->Add(foodItem, 0, wxALIGN_CENTER|wxLEFT, 5);
+        scrolledSizer->Add(foodItem, 0, wxALIGN_CENTER | wxLEFT, 5);
     }
     scrolledWindow->SetSizer(scrolledSizer);
     scrolledSizer->FitInside(scrolledWindow);
@@ -697,8 +696,8 @@ void MainFrame::ShowOrderFood(int tableNumber) {
     panelSizer->Add(scrolledWindow, 1, wxEXPAND | wxALL, 10);
 
     // Buttons for adding an order item, calculating total, etc.
-    wxButton* addOrderButton = new wxButton(panel, wxID_ANY, "Order",wxDefaultPosition,wxSize(150,-1));
-    wxButton* calculateButton = new wxButton(panel, wxID_ANY, "Calculate", wxDefaultPosition, wxSize(150, -1));
+    wxButton* addOrderButton = new wxButton(panel, wxID_ANY, "Order", wxDefaultPosition, wxSize(150, -1));
+    wxButton* calculateButton = new wxButton(panel, wxID_ANY, "Make Receipt", wxDefaultPosition, wxSize(150, -1));
     wxButton* backButton = new wxButton(panel, wxID_ANY, "Back", wxDefaultPosition, wxSize(150, -1));
     addOrderButton->SetBackgroundColour(wxColour(212, 203, 169));
     calculateButton->SetBackgroundColour(wxColour(212, 203, 169));
@@ -772,7 +771,7 @@ void MainFrame::CalculateTotal(int tableNumber) {
     wxStaticText* orderSummary = new wxStaticText(panel, wxID_ANY, receiptText, wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
     orderSummary->SetFont(textFont);
 
-    wxButton* backButton = new wxButton(panel, wxID_ANY, "Back", wxDefaultPosition,wxSize(140,-1));
+    wxButton* backButton = new wxButton(panel, wxID_ANY, "Back", wxDefaultPosition, wxSize(140, -1));
     backButton->SetFont(textFont);
     backButton->SetBackgroundColour(wxColour(212, 203, 169));
 
@@ -783,7 +782,7 @@ void MainFrame::CalculateTotal(int tableNumber) {
     panelSizer->AddStretchSpacer(1);
     panelSizer->Add(orderSummary, 0, wxALIGN_CENTER, 10);
     panelSizer->AddStretchSpacer(4);
-    panelSizer->Add(checkOut,0,wxALIGN_CENTER,10);
+    panelSizer->Add(checkOut, 0, wxALIGN_CENTER, 10);
     panelSizer->Add(backButton, 0, wxALL | wxALIGN_CENTER, 5);
 
 
@@ -897,6 +896,4 @@ void MainFrame::ShowDataTable()
     panel->SetSizer(mainSizer);
     SwitchPanel(panel);
 }
-
-
 
